@@ -34,9 +34,9 @@ export default function NotesPage() {
     if (activeTab === 'excerpts') items = writings;
     if (activeTab === 'poems') items = poems;
     if (activeTab === 'articles') {
-      return articles.map(a => ({ ...a, excerpt: "", type: "Article" })).filter(item => 
+      return (articles.map(a => ({ ...a, excerpt: "", type: "Article" })) as NoteItem[]).filter(item => 
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.source.toLowerCase().includes(searchQuery.toLowerCase())
+        (item.source?.toLowerCase().includes(searchQuery.toLowerCase()))
       );
     }
 
