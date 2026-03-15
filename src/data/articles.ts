@@ -18,5 +18,15 @@ export const articles = [
     title: "I Would Rather Be Herod’s Pig: The History of a Taboo",
     link: "https://longreads.com/2015/10/14/i-would-rather-be-herods-pig-the-history-of-a-taboo/",
     source: "Longreads"
+  },
+  {
+    title: "Nabokov's Recommendations",
+    link: "http://wmjas.wikidot.com/nabokov-s-recommendations",
+    source: "William Adams"
+  },
+  {
+    title: "Good conversations have lots of doorknobs",
+    link: "https://www.experimental-history.com/p/good-conversations-have-lots-of-doorknobs",
+    source: "Experimental History"
   }
 ];
