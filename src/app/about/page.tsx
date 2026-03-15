@@ -12,19 +12,17 @@ export default function AboutPage() {
           transition={{ duration: 0.8 }}
           className="mb-12"
         >
-          <h1 className="text-3xl md:text-4xl font-bold text-ink mb-6 md:mb-8 italic font-serif">About</h1>
-          <div className="max-w-prose">
-            <p className="text-lg md:text-xl text-pine-mid/80 leading-relaxed mb-6 md:mb-8 font-serif italic">
-              I'm Vishal. A data engineer by day, keeping myself alive with everything else you see here.
+          <h1 className="text-3xl md:text-4xl font-bold text-ink mb-6 md:mb-8 font-serif">About</h1>
+          <div className="max-w-prose text-base md:text-lg text-pine-mid/70 leading-relaxed space-y-6 md:space-y-8">
+            <p>
+              I'm Vishal. A data engineer based out of Brooklyn. Apart from everyday’s mundane, everything you see here keeps me going.
             </p>
-            <div className="space-y-6 text-base md:text-lg text-pine-mid/70 leading-relaxed">
-              <p>
-                Whether it's experimenting with the web, diving into literature, or enjoying a slow pint of Guinness—this is my space for documenting the journey.
-              </p>
-              <p>
-                This site serves as a digital home for my projects, a library of excerpts that have moved me, and a collection of articles that I find worth sharing.
-              </p>
-            </div>
+            <p>
+              My interests are primarily everything related to music, poetry, literature, languages, and tech. Currently, I am learning Persian, and Spanish.
+            </p>
+            <p>
+              This site serves as a digital home for my projects, a library of excerpts that have moved me, and a collection of articles that I find worth sharing.
+            </p>
           </div>
         </motion.section>
       </div>
