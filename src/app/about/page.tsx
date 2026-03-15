@@ -15,7 +15,7 @@ export default function AboutPage() {
           <h1 className="text-3xl md:text-4xl font-bold text-ink mb-6 md:mb-8 font-serif">About</h1>
           <div className="max-w-prose text-base md:text-lg text-pine-mid/70 leading-relaxed space-y-6 md:space-y-8">
             <p>
-              I'm Vishal. A data engineer based out of Brooklyn. Apart from everyday’s mundane, everything you see here keeps me going.
+              I&apos;m Vishal. A data engineer based out of Brooklyn. Apart from everyday&rsquo;s mundane, everything you see here keeps me going.
             </p>
             <p>
               My interests are primarily everything related to music, poetry, literature, languages, and tech. Currently, I am learning Persian, and Spanish.

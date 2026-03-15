@@ -1,18 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ArrowRight, ExternalLink } from "lucide-react";
+import { X, ArrowRight, ExternalLink, Search, LayoutGrid, List, User, Globe } from "lucide-react";
 import { writings } from "@/data/writings";
 import { articles } from "@/data/articles";
 import { poems } from "@/data/poems";
+import { cn } from "@/lib/utils";
 
 type TabType = 'excerpts' | 'articles' | 'poems';
+type ViewMode = 'grid' | 'list';
+type GroupBy = 'none' | 'author' | 'source';
 
 interface NoteItem {
   title: string;
   excerpt: string;
   type: string;
+  author?: string;
+  tags?: string[];
   link?: string;
   source?: string;
 }
@@ -20,88 +25,277 @@ interface NoteItem {
 export default function NotesPage() {
   const [activeTab, setActiveTab] = useState<TabType>('excerpts');
   const [selectedExcerpt, setSelectedExcerpt] = useState<NoteItem | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  const [groupBy, setGroupBy] = useState<GroupBy>('none');
 
-  const renderExcerpts = (items: NoteItem[]) => (
-    <motion.div
-      key={activeTab}
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
-      className="grid md:grid-cols-2 gap-6"
-    >
-      {items.map((item, idx) => (
-        <button
+  const currentItems = useMemo(() => {
+    let items: NoteItem[] = [];
+    if (activeTab === 'excerpts') items = writings;
+    if (activeTab === 'poems') items = poems;
+    if (activeTab === 'articles') {
+      return articles.map(a => ({ ...a, excerpt: "", type: "Article" })).filter(item => 
+        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.source.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    return items.filter(item => {
+      const q = searchQuery.toLowerCase();
+      return (
+        item.title.toLowerCase().includes(q) ||
+        (item.author?.toLowerCase().includes(q)) ||
+        (item.excerpt.toLowerCase().includes(q)) ||
+        (item.source?.toLowerCase().includes(q))
+      );
+    });
+  }, [activeTab, searchQuery]);
+
+  const groupedItems = useMemo(() => {
+    if (groupBy === 'none') return { "All": currentItems };
+    
+    const groups: Record<string, NoteItem[]> = {};
+    currentItems.forEach(item => {
+      let key = "Unknown";
+      if (groupBy === 'author' && activeTab !== 'articles') {
+        key = item.author || "Unknown";
+      } else if (groupBy === 'source' && activeTab === 'articles') {
+        key = item.source || "Unknown";
+      } else {
+        key = "All";
+      }
+      
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(item);
+    });
+
+    if (groupBy === 'author' && activeTab === 'articles') return { "All": currentItems };
+    if (groupBy === 'source' && activeTab !== 'articles') return { "All": currentItems };
+
+    return groups;
+  }, [currentItems, groupBy, activeTab]);
+
+  const highlightText = (text: string, query: string) => {
+    if (!query) return text;
+    const parts = text.split(new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'));
+    return (
+      <>
+        {parts.map((part, i) => 
+          part.toLowerCase() === query.toLowerCase() ? (
+            <mark key={i} className="bg-amber-200/60 text-ink rounded-sm px-0.5">{part}</mark>
+          ) : (
+            part
+          )
+        )}
+      </>
+    );
+  };
+
+  const renderItem = (item: NoteItem, idx: number) => {
+    if (activeTab === 'articles') {
+      if (viewMode === 'list') {
+        return (
+          <motion.a
+            key={item.title + idx}
+            href={item.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={{ x: 4 }}
+            transition={{ type: "spring", stiffness: 600, damping: 25 }}
+            className="w-full text-left py-4 border-b border-pine-mid/5 flex items-center justify-between group transition-all"
+          >
+            <div className="flex items-baseline gap-4">
+              <span className="text-ink font-serif text-lg group-hover:text-pine-dark transition-colors">
+                {highlightText(item.title, searchQuery)}
+              </span>
+              <span className="text-sm text-pine-mid/40 font-mono italic">
+                — {highlightText(item.source || "", searchQuery)}
+              </span>
+            </div>
+            <ExternalLink size={14} className="text-pine-mid/20 group-hover:text-pine-dark transition-colors" />
+          </motion.a>
+        );
+      }
+
+      return (
+        <motion.a 
+          key={item.title + idx} 
+          href={item.link} 
+          target="_blank" 
+          rel="noopener noreferrer"
+          whileHover={{ y: -4, scale: 1.01 }}
+          transition={{ type: "spring", stiffness: 600, damping: 25 }}
+          className="flex items-center justify-between p-6 rounded-xl border border-pine-mid/5 hover:bg-pine-dark/[0.02] transition-all group bg-white hover:shadow-lg hover:shadow-pine-dark/5"
+        >
+          <div>
+            <h3 className="text-lg font-bold text-ink group-hover:text-pine-dark transition-colors">
+              {highlightText(item.title, searchQuery)}
+            </h3>
+            <span className="text-xs font-mono text-pine-mid/40">
+              {highlightText(item.source || "", searchQuery)}
+            </span>
+          </div>
+          <ExternalLink size={18} className="text-pine-mid/20 group-hover:text-pine-dark transition-colors" />
+        </motion.a>
+      );
+    }
+
+    if (viewMode === 'list') {
+      return (
+        <motion.button
           key={item.title + idx}
           onClick={() => setSelectedExcerpt(item)}
-          className="text-left p-8 rounded-2xl bg-white border border-pine-mid/5 group hover:border-pine-mid/20 transition-all hover:shadow-lg hover:shadow-pine-dark/5"
+          whileHover={{ x: 4 }}
+          transition={{ type: "spring", stiffness: 600, damping: 25 }}
+          className="w-full text-left py-4 border-b border-pine-mid/5 flex items-center justify-between group transition-all"
         >
-          <span className="text-[10px] font-mono uppercase tracking-widest text-pine-mid/40 mb-2 block">{item.type}</span>
-          <h3 className="text-xl font-bold text-ink mb-3 group-hover:text-pine-dark transition-colors">{item.title}</h3>
-          <p className="text-pine-mid/80 font-serif text-base leading-relaxed line-clamp-3 whitespace-pre-wrap">
-            {item.excerpt}
-          </p>
-          <div className="mt-4 flex items-center gap-2 text-[10px] font-mono text-pine-dark opacity-0 group-hover:opacity-100 transition-opacity">
-            Read Full {item.type} <ArrowRight size={10} />
+          <div className="flex items-baseline gap-4">
+            <span className="text-ink font-serif text-lg group-hover:text-pine-dark transition-colors">
+              {highlightText(item.title, searchQuery)}
+            </span>
+            {item.author && (
+              <span className="text-sm text-pine-mid/40 font-mono italic">
+                — {highlightText(item.author, searchQuery)}
+              </span>
+            )}
           </div>
-        </button>
-      ))}
-    </motion.div>
-  );
+          <ArrowRight size={14} className="text-pine-mid/20 group-hover:text-pine-dark transition-transform group-hover:translate-x-1" />
+        </motion.button>
+      );
+    }
+
+    return (
+      <motion.button
+        key={item.title + idx}
+        onClick={() => setSelectedExcerpt(item)}
+        whileHover={{ y: -4, scale: 1.02 }}
+        transition={{ type: "spring", stiffness: 600, damping: 20 }}
+        className="text-left p-8 rounded-2xl bg-white border border-pine-mid/5 group hover:border-pine-mid/20 transition-all hover:shadow-xl hover:shadow-pine-dark/5 flex flex-col h-full"
+      >
+        <div className="flex justify-between items-start mb-2">
+          <span className="text-[10px] font-mono uppercase tracking-widest text-pine-mid/40">{item.type}</span>
+        </div>
+        <h3 className="text-xl font-bold text-ink mb-1 group-hover:text-pine-dark transition-colors">
+          {highlightText(item.title, searchQuery)}
+        </h3>
+        {item.author && (
+          <p className="text-xs font-mono text-pine-mid/40 mb-4 italic">
+            by {highlightText(item.author, searchQuery)}
+          </p>
+        )}
+        
+        {item.excerpt && (
+          <p className="text-pine-mid/80 font-serif text-base leading-relaxed line-clamp-3 whitespace-pre-wrap">
+            {highlightText(item.excerpt, searchQuery)}
+          </p>
+        )}
+      </motion.button>
+    );
+  };
 
   return (
     <div className="pt-32 pb-20 px-6">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <section className="mb-12">
           <h1 className="text-4xl font-bold text-ink mb-4 font-serif">Notes</h1>
           <p className="text-pine-mid/60 font-mono text-sm tracking-widest uppercase">Excerpts, articles, and poems i like.</p>
         </section>
 
-        <div className="flex justify-start gap-8 mb-12 border-b border-pine-mid/10">
-          {(['excerpts', 'articles', 'poems'] as const).map((tab) => (
-            <button 
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`pb-4 text-sm font-mono transition-colors relative capitalize ${activeTab === tab ? 'text-pine-dark' : 'text-pine-mid/40 hover:text-pine-dark'}`}
-            >
-              {tab}
-              {activeTab === tab && (
-                <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-px bg-pine-dark" />
-              )}
-            </button>
-          ))}
+        <div className="flex flex-col md:flex-row gap-6 mb-12 items-start md:items-center justify-between border-b border-pine-mid/10 pb-8">
+          <div className="flex flex-wrap gap-8">
+            {(['excerpts', 'articles', 'poems'] as const).map((tab) => (
+              <button 
+                key={tab}
+                onClick={() => { setActiveTab(tab); setGroupBy('none'); }}
+                className={`pb-4 text-sm font-mono transition-colors relative capitalize ${activeTab === tab ? 'text-pine-dark' : 'text-pine-mid/40 hover:text-pine-dark'}`}
+              >
+                {tab}
+                {activeTab === tab && (
+                  <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-px bg-pine-dark" />
+                )}
+              </button>
+            ))}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-4 w-full md:w-auto">
+            <div className="relative flex-grow md:flex-grow-0">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-pine-mid/30" size={14} />
+              <input 
+                type="text"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 pr-4 py-2 bg-white border border-pine-mid/10 rounded-full text-sm font-mono focus:outline-none focus:border-pine-dark/20 w-full"
+              />
+            </div>
+
+            <div className="flex bg-pine-dark/[0.03] p-1 rounded-lg border border-pine-mid/5">
+              <button 
+                onClick={() => setViewMode('grid')}
+                className={cn("p-1.5 rounded-md transition-all", viewMode === 'grid' ? "bg-white shadow-sm text-pine-dark" : "text-pine-mid/30")}
+              >
+                <LayoutGrid size={16} />
+              </button>
+              <button 
+                onClick={() => setViewMode('list')}
+                className={cn("p-1.5 rounded-md transition-all", viewMode === 'list' ? "bg-white shadow-sm text-pine-dark" : "text-pine-mid/30")}
+              >
+                <List size={16} />
+              </button>
+            </div>
+
+            {activeTab !== 'articles' ? (
+              <button 
+                onClick={() => setGroupBy(groupBy === 'none' ? 'author' : 'none')}
+                className={cn(
+                  "flex items-center gap-2 px-3 py-2 rounded-lg border transition-all text-xs font-mono",
+                  groupBy === 'author' ? "bg-pine-dark text-white border-pine-dark" : "bg-white border-pine-mid/10 text-pine-mid/60"
+                )}
+              >
+                <User size={14} /> {groupBy === 'author' ? 'Grouped by Author' : 'Group by Author'}
+              </button>
+            ) : (
+              <button 
+                onClick={() => setGroupBy(groupBy === 'none' ? 'source' : 'none')}
+                className={cn(
+                  "flex items-center gap-2 px-3 py-2 rounded-lg border transition-all text-xs font-mono",
+                  groupBy === 'source' ? "bg-pine-dark text-white border-pine-dark" : "bg-white border-pine-mid/10 text-pine-mid/60"
+                )}
+              >
+                <Globe size={14} /> {groupBy === 'source' ? 'Grouped by Website' : 'Group by Website'}
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="min-h-[400px]">
           <AnimatePresence mode="wait">
-            {activeTab === 'excerpts' && renderExcerpts(writings)}
-            
-            {activeTab === 'poems' && renderExcerpts(poems)}
-
-            {activeTab === 'articles' && (
-              <motion.div
-                key="articles"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="grid gap-4"
-              >
-                {articles.map((item, idx) => (
-                  <a 
-                    key={item.title} 
-                    href={item.link} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-between p-6 rounded-xl border border-pine-mid/5 hover:bg-pine-dark/[0.02] transition-colors group"
-                  >
-                    <div>
-                      <h3 className="text-lg font-bold text-ink group-hover:text-pine-dark transition-colors">{item.title}</h3>
-                      <span className="text-xs font-mono text-pine-mid/40">{item.source}</span>
-                    </div>
-                    <ExternalLink size={18} className="text-pine-mid/20 group-hover:text-pine-dark transition-colors" />
-                  </a>
-                ))}
-              </motion.div>
-            )}
+            <motion.div
+              key={activeTab + searchQuery + viewMode + groupBy}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              {Object.entries(groupedItems).map(([groupName, items]) => (
+                <div key={groupName} className="mb-12 last:mb-0">
+                  {groupBy !== 'none' && groupName !== "All" && (
+                    <h2 className="text-xl font-bold text-pine-dark mb-6 border-l-2 border-pine-dark pl-4 font-serif">{groupName}</h2>
+                  )}
+                  <div className={cn(
+                    viewMode === 'grid' ? "grid md:grid-cols-2 gap-6" : "space-y-2"
+                  )}>
+                    {items.map((item, idx) => renderItem(item, idx))}
+                  </div>
+                </div>
+              ))}
+              
+              {currentItems.length === 0 && (
+                <div className="flex flex-col items-center justify-center py-20 text-pine-mid/30">
+                  <Search size={48} className="mb-4 opacity-20" />
+                  <p className="font-mono text-sm uppercase tracking-widest">No matching notes found</p>
+                </div>
+              )}
+            </motion.div>
           </AnimatePresence>
         </div>
       </div>
@@ -131,29 +325,24 @@ export default function NotesPage() {
                 <span className="text-xs font-mono uppercase tracking-[0.2em] text-pine-mid/40 mb-4 block mt-4 md:mt-0">
                   {selectedExcerpt.type}
                 </span>
-                <h2 className="text-2xl md:text-3xl font-bold text-ink mb-6 md:mb-8">
-                  {selectedExcerpt.title}
+                <h2 className="text-2xl md:text-3xl font-bold text-ink mb-2">
+                  {highlightText(selectedExcerpt.title, searchQuery)}
                 </h2>
+                {selectedExcerpt.author && (
+                  <p className="text-sm font-mono text-pine-mid/40 mb-8 italic">
+                    by {highlightText(selectedExcerpt.author, searchQuery)}
+                  </p>
+                )}
                 <div className="prose prose-pine max-w-none">
-                  <p className="text-[15px] sm:text-base md:text-lg text-pine-dark/90 font-serif leading-relaxed whitespace-pre-wrap">
-                    {selectedExcerpt.excerpt}
+                  <p className="text-[15px] sm:text-base md:text-lg text-pine-dark/90 font-serif leading-relaxed whitespace-pre-wrap text-justify">
+                    {highlightText(selectedExcerpt.excerpt, searchQuery)}
                   </p>
                   {selectedExcerpt.source && (
                     <p className="mt-8 text-sm md:text-base font-serif italic text-pine-mid/80">
-                      — {selectedExcerpt.source}
+                      — {highlightText(selectedExcerpt.source, searchQuery)}
                     </p>
                   )}
                 </div>
-                {selectedExcerpt.link && (
-                  <a 
-                    href={selectedExcerpt.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-12 flex items-center gap-2 text-xs font-mono text-pine-mid/40 hover:text-pine-dark transition-colors inline-flex group"
-                  >
-                    Original Source <ExternalLink size={12} className="group-hover:translate-x-0.5 transition-transform" />
-                  </a>
-                )}
               </div>
             </motion.div>
             <div className="absolute inset-0 -z-10" onClick={() => setSelectedExcerpt(null)} />

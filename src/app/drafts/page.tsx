@@ -29,8 +29,14 @@ export default function DraftsPage() {
               onClick={() => setSelectedDraft(item)}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="text-left p-8 rounded-2xl bg-white border border-pine-mid/5 group hover:border-pine-mid/20 transition-all hover:shadow-lg hover:shadow-pine-dark/5"
+              whileHover={{ y: -4, scale: 1.02 }}
+              transition={{ 
+                duration: 0.5, 
+                delay: idx * 0.1,
+                y: { type: "spring", stiffness: 600, damping: 20 },
+                scale: { type: "spring", stiffness: 600, damping: 20 }
+              }}
+              className="text-left p-8 rounded-2xl bg-white border border-pine-mid/5 group hover:border-pine-mid/20 transition-all hover:shadow-xl hover:shadow-pine-dark/5 flex flex-col h-full"
             >
               <span className="text-[10px] font-mono uppercase tracking-widest text-pine-mid/40 mb-2 block">{item.type}</span>
               <h3 className="text-xl font-bold text-ink mb-3 group-hover:text-pine-dark transition-colors">{item.title}</h3>
@@ -74,7 +80,7 @@ export default function DraftsPage() {
                   {selectedDraft.title}
                 </h2>
                 <div className="prose prose-pine max-w-none">
-                  <p className="text-[15px] sm:text-base md:text-lg text-pine-dark/90 font-serif leading-relaxed whitespace-pre-wrap">
+                  <p className="text-[15px] sm:text-base md:text-lg text-pine-dark/90 font-serif leading-relaxed whitespace-pre-wrap text-justify">
                     {selectedDraft.excerpt}
                   </p>
                 </div>

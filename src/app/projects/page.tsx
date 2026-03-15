@@ -10,7 +10,7 @@ export default function ProjectsPage() {
       <div className="max-w-6xl mx-auto">
         <section className="mb-12">
           <h1 className="text-4xl font-bold text-ink mb-4 font-serif">Projects</h1>
-          <p className="text-pine-mid/60 font-mono text-sm tracking-widest uppercase">Things I've built or am building.</p>
+          <p className="text-pine-mid/60 font-mono text-sm tracking-widest uppercase">Things I&apos;ve built or am building.</p>
         </section>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -22,8 +22,14 @@ export default function ProjectsPage() {
               rel="noopener noreferrer"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="project-card group p-8 rounded-2xl bg-white border border-pine-mid/5 flex flex-col h-full"
+              whileHover={{ y: -4, scale: 1.02 }}
+              transition={{ 
+                duration: 0.5, 
+                delay: idx * 0.1,
+                y: { type: "spring", stiffness: 600, damping: 20 },
+                scale: { type: "spring", stiffness: 600, damping: 20 }
+              }}
+              className="project-card group p-8 rounded-2xl bg-white border border-pine-mid/5 hover:border-pine-mid/20 flex flex-col h-full hover:shadow-xl hover:shadow-pine-dark/5 transition-all"
             >
               <div className={`w-12 h-12 rounded-xl ${project.color} ${project.textColor} flex items-center justify-center mb-6 transition-transform group-hover:scale-110 duration-500`}>
                 <project.icon size={24} />

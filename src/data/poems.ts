@@ -1,14 +1,14 @@
 export const poems = [
   {
     title: "This Be The Verse",
-    source: "Philip Larkin",
+    author: "Philip Larkin",
     excerpt: "They fuck you up, your mum and dad.   \n    They may not mean to, but they do.   \nThey fill you with the faults they had\n    And add some extra, just for you.\n\nBut they were fucked up in their turn\n    By fools in old-style hats and coats,   \nWho half the time were soppy-stern\n    And half at one another’s throats.\n\nMan hands on misery to man.\n    It deepens like a coastal shelf.\nGet out as early as you can,\n    And don’t have any kids yourself.",
     type: "Poem",
     link: "https://www.poetryfoundation.org/poems/48419/this-be-the-verse"
   },
   {
     title: "Love after Love",
-    source: "Derek Walcott",
+    author: "Derek Walcott",
     excerpt: `The time will come
 when, with elation,
 you will greet yourself arriving
@@ -31,7 +31,7 @@ Sit. Feast on your life.`,
   },
   {
     title: "For Grace, After A Party",
-    source: "Frank O'Hara",
+    author: "Frank O'Hara",
     excerpt: `You do not always know what I am feeling.
 Last night in the warm spring air while I was
 blazing my tirade against someone who doesn't
