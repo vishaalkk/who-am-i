@@ -10,9 +10,9 @@ module.exports = {
       colors: {
         'paper': '#fdfcf7',
         'ink': '#1a1a1a',
-        'emerald-dark': '#064e3b',
-        'emerald-mid': '#065f46',
-        'teal-deep': '#134e4a',
+        'pine-dark': '#064e3b',
+        'pine-mid': '#115e59',
+        'slate-deep': '#1e293b',
         'sage': '#d1d5db',
       },
       fontFamily: {

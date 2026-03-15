@@ -6,24 +6,24 @@ export const projects = [
     description: "My personal book collection.",
     link: "https://booksofdisquiet.com",
     icon: Book,
-    color: "bg-emerald-dark/5",
-    textColor: "text-emerald-dark"
+    color: "bg-pine-dark/5",
+    textColor: "text-pine-dark"
   },
   {
     title: "Where is Vishal?",
     description: "A real-time experiment in presence and digital footprint.",
     link: "https://whereisvishal.com",
     icon: Globe,
-    color: "bg-teal-deep/5",
-    textColor: "text-teal-deep"
+    color: "bg-slate-deep/5",
+    textColor: "text-slate-deep"
   },
   {
     title: "Hold My Guinness",
     description: "A lighthearted pursuit of the perfect pint and Irish culture.",
     link: "https://holdmyguinness.com",
     icon: Heart,
-    color: "bg-emerald-mid/5",
-    textColor: "text-emerald-mid"
+    color: "bg-pine-mid/5",
+    textColor: "text-pine-mid"
   },
   {
     title: "Qavvali",
@@ -36,9 +36,9 @@ export const projects = [
   {
     title: "Columbia Urdu Poetry Group",
     description: "An archive of our weekly poetry readings.",
-    link: "https://www.columbiaurdupoetrygroup.com/",
+    link: "https://www.columbiaurdupoetrygroup.com/v2/",
     icon: Book,
-    color: "bg-indigo-900/5",
-    textColor: "text-indigo-900"
+    color: "bg-pine-900/5",
+    textColor: "text-pine-900"
   }
 ];

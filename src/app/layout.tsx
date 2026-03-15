@@ -31,13 +31,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${serif.variable} ${mono.variable} ${sans.variable} font-sans selection:bg-emerald-mid/20`}>
+      <body className={`${serif.variable} ${mono.variable} ${sans.variable} font-sans selection:bg-pine-mid/20`}>
         <Navigation />
         <main className="min-h-screen">
           {children}
         </main>
-        <footer className="py-12 border-t border-emerald-mid/10 mt-20">
-          <div className="max-w-6xl mx-auto px-6 text-center text-sm font-mono text-emerald-mid/60">
+        <footer className="py-12 border-t border-pine-mid/10 mt-20">
+          <div className="max-w-6xl mx-auto px-6 text-center text-sm font-mono text-pine-mid/60">
             © {new Date().getFullYear()} — Built with precision and purpose.
           </div>
         </footer>

@@ -17,7 +17,7 @@ export default function Navigation() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#fdfcf7]/80 backdrop-blur-md border-b border-[#065f46]/5">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#fdfcf7]/80 backdrop-blur-md border-b border-[#115e59]/5">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
         <Link href="/" className="font-serif text-xl font-bold text-[#064e3b] tracking-tight">
           V.
@@ -29,7 +29,7 @@ export default function Navigation() {
               href={item.path}
               className={cn(
                 "text-sm font-mono transition-colors relative py-1",
-                pathname === item.path ? "text-[#064e3b]" : "text-[#065f46]/60 hover:text-[#064e3b]"
+                pathname === item.path ? "text-[#064e3b]" : "text-[#115e59]/60 hover:text-[#064e3b]"
               )}
             >
               {item.name}

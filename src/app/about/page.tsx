@@ -13,11 +13,11 @@ export default function AboutPage() {
           className="mb-12"
         >
           <h1 className="text-4xl font-bold text-ink mb-8 italic font-serif">About</h1>
-          <div className="prose prose-emerald">
-            <p className="text-xl text-emerald-mid/80 leading-relaxed mb-8 font-serif italic">
+          <div className="prose prose-pine">
+            <p className="text-xl text-pine-mid/80 leading-relaxed mb-8 font-serif italic">
               I'm Vishal. A data engineer by day, keeping myself alive with everything else you see here.
             </p>
-            <div className="space-y-6 text-lg text-emerald-mid/70 leading-relaxed">
+            <div className="space-y-6 text-lg text-pine-mid/70 leading-relaxed">
               <p>
                 Whether it's experimenting with the web, diving into literature, or enjoying a slow pint of Guinness—this is my space for documenting the journey.
               </p>

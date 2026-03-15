@@ -5,9 +5,9 @@
 :root {
   --paper: #fdfcf7;
   --ink: #1a1a1a;
-  --emerald-dark: #064e3b;
-  --emerald-mid: #065f46;
-  --teal-deep: #134e4a;
+  --pine-dark: #064e3b;
+  --pine-mid: #115e59;
+  --slate-deep: #1e293b;
 }
 
 body {
@@ -29,7 +29,7 @@ body {
 }
 
 .project-card:hover {
-  @apply border-emerald-mid/20;
+  @apply border-pine-mid/20;
   box-shadow: 0 10px 30px -10px rgba(6, 78, 59, 0.1);
 }
 
