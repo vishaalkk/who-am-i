@@ -138,6 +138,11 @@ export default function NotesPage() {
                   <p className="text-[15px] sm:text-base md:text-lg text-pine-dark/90 font-serif leading-relaxed whitespace-pre-wrap">
                     {selectedExcerpt.excerpt}
                   </p>
+                  {selectedExcerpt.source && (
+                    <p className="mt-8 text-sm md:text-base font-serif italic text-pine-mid/80">
+                      — {selectedExcerpt.source}
+                    </p>
+                  )}
                 </div>
                 {selectedExcerpt.link && (
                   <a 
