@@ -18,7 +18,7 @@ export default function DraftsPage() {
     <div className="pt-32 pb-20 px-6">
       <div className="max-w-4xl mx-auto">
         <section className="mb-12">
-          <h1 className="text-4xl font-bold text-ink mb-4 italic font-serif">Drafts</h1>
+          <h1 className="text-4xl font-bold text-ink mb-4 font-serif">Drafts</h1>
           <p className="text-pine-mid/60 font-mono text-sm tracking-widest uppercase">My personal poetry and unfinished thoughts.</p>
         </section>
 
