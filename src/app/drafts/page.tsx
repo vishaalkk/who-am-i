@@ -57,24 +57,24 @@ export default function DraftsPage() {
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.95 }}
-              className="relative w-full max-w-3xl max-h-[80vh] overflow-y-auto bg-white rounded-3xl p-8 md:p-12 shadow-2xl border border-pine-mid/10"
+              className="relative w-full max-w-3xl max-h-[80vh] overflow-y-auto bg-white rounded-3xl p-6 md:p-12 shadow-2xl border border-pine-mid/10"
             >
               <button
                 onClick={() => setSelectedDraft(null)}
-                className="absolute top-6 right-6 p-2 rounded-full hover:bg-pine-dark/5 text-pine-mid/40 hover:text-pine-dark transition-colors"
+                className="absolute top-4 right-4 md:top-6 md:right-6 p-2 rounded-full hover:bg-pine-dark/5 text-pine-mid/40 hover:text-pine-dark transition-colors"
               >
                 <X size={20} />
               </button>
 
               <div className="max-w-2xl mx-auto">
-                <span className="text-xs font-mono uppercase tracking-[0.2em] text-pine-mid/40 mb-4 block">
+                <span className="text-xs font-mono uppercase tracking-[0.2em] text-pine-mid/40 mb-4 block mt-4 md:mt-0">
                   {selectedDraft.type}
                 </span>
-                <h2 className="text-3xl font-bold text-ink mb-8">
+                <h2 className="text-2xl md:text-3xl font-bold text-ink mb-6 md:mb-8">
                   {selectedDraft.title}
                 </h2>
-                <div className="prose prose-pine">
-                  <p className="text-lg md:text-xl text-pine-dark/90 font-serif leading-relaxed whitespace-pre-wrap">
+                <div className="prose prose-pine max-w-none">
+                  <p className="text-[15px] sm:text-base md:text-lg text-pine-dark/90 font-serif leading-relaxed whitespace-pre-wrap">
                     {selectedDraft.excerpt}
                   </p>
                 </div>
