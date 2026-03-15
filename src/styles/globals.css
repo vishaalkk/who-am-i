@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --paper: #fdfcf7;
+  --ink: #1a1a1a;
+  --emerald-dark: #064e3b;
+  --emerald-mid: #065f46;
+  --teal-deep: #134e4a;
+}
+
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+}
+
+.project-card {
+  @apply relative overflow-hidden transition-all duration-500 ease-out;
+  border: 1px solid transparent;
+}
+
+.project-card:hover {
+  @apply border-emerald-mid/20;
+  box-shadow: 0 10px 30px -10px rgba(6, 78, 59, 0.1);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
