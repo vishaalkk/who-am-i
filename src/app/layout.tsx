@@ -36,9 +36,9 @@ export default function RootLayout({
         <main className="min-h-screen">
           {children}
         </main>
-        <footer className="py-12 border-t border-pine-mid/10 mt-20">
-          <div className="max-w-6xl mx-auto px-6 text-center text-sm font-mono text-pine-mid/60">
-            © {new Date().getFullYear()} — Built with precision and purpose.
+        <footer className="py-12 border-t border-[#115e59]/10 mt-20">
+          <div className="max-w-6xl mx-auto px-6 text-center text-sm font-mono text-[#115e59]/60">
+            © {new Date().getFullYear()} — Reading, writing, building.
           </div>
         </footer>
       </body>
