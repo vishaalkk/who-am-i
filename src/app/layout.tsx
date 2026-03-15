@@ -20,7 +20,7 @@ const sans = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Vishal",
+  title: "V.",
   description: "A personal space for my projects and interests.",
 };
 
