@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, Suspense } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ArrowRight, ExternalLink, Search, LayoutGrid, List, User, Globe } from "lucide-react";
+import { X, ArrowRight, ExternalLink, Search, LayoutGrid, List, User, Globe, Link, Check } from "lucide-react";
 import { writings } from "@/data/writings";
 import { articles } from "@/data/articles";
 import { poems } from "@/data/poems";
-import { cn } from "@/lib/utils";
+import { cn, slugify } from "@/lib/utils";
 
 type TabType = 'excerpts' | 'articles' | 'poems';
 type ViewMode = 'grid' | 'list';
@@ -22,12 +23,17 @@ interface NoteItem {
   source?: string;
 }
 
-export default function NotesPage() {
+function NotesContent() {
   const [activeTab, setActiveTab] = useState<TabType>('excerpts');
   const [selectedExcerpt, setSelectedExcerpt] = useState<NoteItem | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [groupBy, setGroupBy] = useState<GroupBy>('none');
+  const [copied, setCopied] = useState(false);
+
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const currentItems = useMemo(() => {
     let items: NoteItem[] = [];
@@ -50,6 +56,50 @@ export default function NotesPage() {
       );
     });
   }, [activeTab, searchQuery]);
+
+  // Handle deep linking on mount
+  useEffect(() => {
+    const itemSlug = searchParams.get('item');
+    if (itemSlug) {
+      const allItems = [
+        ...writings, 
+        ...poems, 
+        ...articles.map(a => ({ ...a, excerpt: "", type: "Article" }))
+      ];
+      const found = allItems.find(item => slugify(item.title) === itemSlug);
+      if (found) {
+        setSelectedExcerpt(found as NoteItem);
+        if (found.type === 'Excerpt') setActiveTab('excerpts');
+        if (found.type === 'Poem') setActiveTab('poems');
+        if (found.type === 'Article') setActiveTab('articles');
+      }
+    }
+  }, [searchParams]);
+
+  const handleSelectExcerpt = (item: NoteItem) => {
+    setSelectedExcerpt(item);
+    if (item.type !== 'Article') {
+      router.push(`${pathname}?item=${slugify(item.title)}`, { scroll: false });
+    }
+  };
+
+  const handleCloseExcerpt = () => {
+    setSelectedExcerpt(null);
+    router.push(pathname, { scroll: false });
+    setCopied(false);
+  };
+
+  const copyToClipboard = async () => {
+    if (!selectedExcerpt) return;
+    const url = `${window.location.origin}${pathname}?item=${slugify(selectedExcerpt.title)}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy!', err);
+    }
+  };
 
   const groupedItems = useMemo(() => {
     if (groupBy === 'none') return { "All": currentItems };
@@ -144,7 +194,7 @@ export default function NotesPage() {
       return (
         <motion.button
           key={item.title + idx}
-          onClick={() => setSelectedExcerpt(item)}
+          onClick={() => handleSelectExcerpt(item)}
           whileHover={{ x: 4 }}
           transition={{ type: "spring", stiffness: 600, damping: 25 }}
           className="w-full text-left py-4 border-b border-pine-mid/5 flex items-center justify-between group transition-all"
@@ -167,7 +217,7 @@ export default function NotesPage() {
     return (
       <motion.button
         key={item.title + idx}
-        onClick={() => setSelectedExcerpt(item)}
+        onClick={() => handleSelectExcerpt(item)}
         whileHover={{ y: -4, scale: 1.02 }}
         transition={{ type: "spring", stiffness: 600, damping: 20 }}
         className="text-left p-8 rounded-2xl bg-white border border-pine-mid/5 group hover:border-pine-mid/20 transition-all hover:shadow-xl hover:shadow-pine-dark/5 flex flex-col h-full"
@@ -314,12 +364,22 @@ export default function NotesPage() {
               exit={{ opacity: 0, y: 20, scale: 0.95 }}
               className="relative w-full max-w-3xl max-h-[80vh] overflow-y-auto bg-white rounded-3xl p-6 md:p-12 shadow-2xl border border-pine-mid/10"
             >
-              <button
-                onClick={() => setSelectedExcerpt(null)}
-                className="absolute top-4 right-4 md:top-6 md:right-6 p-2 rounded-full hover:bg-pine-dark/5 text-pine-mid/40 hover:text-pine-dark transition-colors"
-              >
-                <X size={20} />
-              </button>
+              <div className="absolute top-4 right-4 md:top-6 md:right-6 flex items-center gap-2">
+                <button
+                  onClick={copyToClipboard}
+                  className="p-2 rounded-full hover:bg-pine-dark/5 text-pine-mid/40 hover:text-pine-dark transition-all flex items-center gap-2"
+                  title="Copy link to this note"
+                >
+                  {copied ? <Check size={18} className="text-green-600" /> : <Link size={18} />}
+                  {copied && <span className="text-xs font-mono text-green-600">Link copied!</span>}
+                </button>
+                <button
+                  onClick={handleCloseExcerpt}
+                  className="p-2 rounded-full hover:bg-pine-dark/5 text-pine-mid/40 hover:text-pine-dark transition-colors"
+                >
+                  <X size={20} />
+                </button>
+              </div>
 
               <div className="max-w-2xl mx-auto">
                 <span className="text-xs font-mono uppercase tracking-[0.2em] text-pine-mid/40 mb-4 block mt-4 md:mt-0">
@@ -345,10 +405,24 @@ export default function NotesPage() {
                 </div>
               </div>
             </motion.div>
-            <div className="absolute inset-0 -z-10" onClick={() => setSelectedExcerpt(null)} />
+            <div className="absolute inset-0 -z-10" onClick={handleCloseExcerpt} />
           </motion.div>
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+export default function NotesPage() {
+  return (
+    <Suspense fallback={
+      <div className="pt-32 pb-20 px-6 text-center">
+        <div className="animate-pulse font-mono text-pine-mid/40 uppercase tracking-widest text-sm">
+          Loading Notes...
+        </div>
+      </div>
+    }>
+      <NotesContent />
+    </Suspense>
   );
 }
