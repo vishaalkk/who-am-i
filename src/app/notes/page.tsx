@@ -107,7 +107,7 @@ function NotesContent() {
     const groups: Record<string, NoteItem[]> = {};
     currentItems.forEach(item => {
       let key = "Unknown";
-      if (groupBy === 'author' && activeTab !== 'articles') {
+      if (groupBy === 'author') {
         key = item.author || "Unknown";
       } else if (groupBy === 'source' && activeTab === 'articles') {
         key = item.source || "Unknown";
@@ -119,7 +119,6 @@ function NotesContent() {
       groups[key].push(item);
     });
 
-    if (groupBy === 'author' && activeTab === 'articles') return { "All": currentItems };
     if (groupBy === 'source' && activeTab !== 'articles') return { "All": currentItems };
 
     return groups;
@@ -160,6 +159,7 @@ function NotesContent() {
               </span>
               <span className="text-sm text-pine-mid/40 font-mono italic">
                 — {highlightText(item.source || "", searchQuery)}
+                {item.author && ` • ${item.author}`}
               </span>
             </div>
             <ExternalLink size={14} className="text-pine-mid/20 group-hover:text-pine-dark transition-colors" />
@@ -183,6 +183,7 @@ function NotesContent() {
             </h3>
             <span className="text-xs font-mono text-pine-mid/40">
               {highlightText(item.source || "", searchQuery)}
+              {item.author && ` • ${item.author}`}
             </span>
           </div>
           <ExternalLink size={18} className="text-pine-mid/20 group-hover:text-pine-dark transition-colors" />
@@ -294,19 +295,18 @@ function NotesContent() {
               </button>
             </div>
 
-            {activeTab !== 'articles' ? (
+            <button 
+              onClick={() => setGroupBy(groupBy === 'author' ? 'none' : 'author')}
+              className={cn(
+                "flex items-center gap-2 px-3 py-2 rounded-lg border transition-all text-xs font-mono",
+                groupBy === 'author' ? "bg-pine-dark text-white border-pine-dark" : "bg-white border-pine-mid/10 text-pine-mid/60"
+              )}
+            >
+              <User size={14} /> {groupBy === 'author' ? 'Grouped by Author' : 'Group by Author'}
+            </button>
+            {activeTab === 'articles' && (
               <button 
-                onClick={() => setGroupBy(groupBy === 'none' ? 'author' : 'none')}
-                className={cn(
-                  "flex items-center gap-2 px-3 py-2 rounded-lg border transition-all text-xs font-mono",
-                  groupBy === 'author' ? "bg-pine-dark text-white border-pine-dark" : "bg-white border-pine-mid/10 text-pine-mid/60"
-                )}
-              >
-                <User size={14} /> {groupBy === 'author' ? 'Grouped by Author' : 'Group by Author'}
-              </button>
-            ) : (
-              <button 
-                onClick={() => setGroupBy(groupBy === 'none' ? 'source' : 'none')}
+                onClick={() => setGroupBy(groupBy === 'source' ? 'none' : 'source')}
                 className={cn(
                   "flex items-center gap-2 px-3 py-2 rounded-lg border transition-all text-xs font-mono",
                   groupBy === 'source' ? "bg-pine-dark text-white border-pine-dark" : "bg-white border-pine-mid/10 text-pine-mid/60"
