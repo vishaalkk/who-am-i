@@ -3,6 +3,9 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { projects } from "@/data/projects";
+import ogImages from "@/data/og-images.json";
+
+const ogImageFor = (link: string): string | undefined => (ogImages as Record<string, string>)[link];
 
 export default function ProjectsPage() {
   return (
@@ -14,7 +17,9 @@ export default function ProjectsPage() {
         </section>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((project, idx) => (
+          {projects.map((project, idx) => {
+            const image = ogImageFor(project.link);
+            return (
             <motion.a
               key={project.title}
               href={project.link}
@@ -31,10 +36,10 @@ export default function ProjectsPage() {
               }}
               className="project-card group p-8 rounded-2xl bg-white border border-pine-mid/5 hover:border-pine-mid/20 flex flex-col h-full hover:shadow-xl hover:shadow-pine-dark/5 transition-all"
             >
-              {project.image && (
+              {image && (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
-                  src={project.image}
+                  src={image}
                   alt={`${project.title} preview`}
                   loading="lazy"
                   className="-mx-8 -mt-8 mb-6 w-[calc(100%+4rem)] max-w-none aspect-[1200/630] object-cover rounded-t-2xl border-b border-pine-mid/5"
@@ -50,7 +55,8 @@ export default function ProjectsPage() {
                 View Project <ArrowRight size={12} />
               </div>
             </motion.a>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

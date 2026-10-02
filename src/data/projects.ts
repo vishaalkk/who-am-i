@@ -3,21 +3,18 @@ export type Project = {
   title: string;
   description: string;
   link: string;
-  image?: string;
 };
 
 export const projects: Project[] = [
   {
     title: "Books of Disquiet",
     description: "My personal book collection.",
-    link: "https://booksofdisquiet.com",
-    image: "/og/booksofdisquiet.png"
+    link: "https://booksofdisquiet.com"
   },
   {
     title: "Where is Vishal?",
     description: "A real-time experiment in presence and digital footprint.",
-    link: "https://whereisvishal.com",
-    image: "/og/whereisvishal.png"
+    link: "https://whereisvishal.com"
   },
   {
     title: "Hold My Guinness",
@@ -37,7 +34,6 @@ export const projects: Project[] = [
   {
     title: "Bahr",
     description: "An interactive guide and scansion tool for Urdu poetry meter (bahr).",
-    link: "https://urdubahr.com/",
-    image: "/og/urdubahr.png"
+    link: "https://urdubahr.com/"
   }
 ];
