@@ -5,7 +5,9 @@ import { ArrowRight } from "lucide-react";
 import { projects } from "@/data/projects";
 import ogImages from "@/data/og-images.json";
 
-const ogImageFor = (link: string): string | undefined => (ogImages as Record<string, string>)[link];
+type OgEntry = { image?: string; description?: string };
+
+const ogFor = (link: string): OgEntry => (ogImages as Record<string, OgEntry>)[link] ?? {};
 
 export default function ProjectsPage() {
   return (
@@ -18,7 +20,7 @@ export default function ProjectsPage() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {projects.map((project, idx) => {
-            const image = ogImageFor(project.link);
+            const { image, description } = ogFor(project.link);
             return (
             <motion.a
               key={project.title}
@@ -49,7 +51,7 @@ export default function ProjectsPage() {
                 {project.title}
               </h3>
               <p className="text-pine-mid/70 text-sm leading-relaxed mb-6 flex-grow">
-                {project.description}
+                {description ?? project.description}
               </p>
               <div className="pt-4 border-t border-pine-mid/5 flex items-center gap-2 text-xs font-mono text-pine-mid/40 group-hover:text-pine-dark transition-colors">
                 View Project <ArrowRight size={12} />

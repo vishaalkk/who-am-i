@@ -18,7 +18,7 @@ export const projects: Project[] = [
   },
   {
     title: "Hold My Guinness",
-    description: "A lighthearted pursuit of the perfect pint and Irish culture.",
+    description: "Track Your Guinness",
     link: "https://holdmyguinness.com"
   },
   {

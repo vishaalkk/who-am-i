@@ -1,6 +1,18 @@
 {
-  "https://booksofdisquiet.com": "/og/booksofdisquiet-com.png",
-  "https://whereisvishal.com": "/og/whereisvishal-com.png",
-  "https://urdubahr.com/": "/og/urdubahr-com.png",
-  "https://qavvali.com": "/og/qavvali-com.png"
+  "https://booksofdisquiet.com": {
+    "description": "Vishal's Book Collection",
+    "image": "/og/booksofdisquiet-com.png"
+  },
+  "https://whereisvishal.com": {
+    "description": "A cat tracking Vishal's travels.",
+    "image": "/og/whereisvishal-com.png"
+  },
+  "https://qavvali.com": {
+    "description": "Qavvāli Wiki documents the qawwali tradition — biographies, family lineages (khandaan & gharana), ensembles, poets, and the kalaam of the qawwals who carry it.",
+    "image": "/og/qavvali-com.png"
+  },
+  "https://urdubahr.com/": {
+    "description": "An interactive guide and scansion tool for Urdu poetry meter (bahr).",
+    "image": "/og/urdubahr-com.png"
+  }
 }
