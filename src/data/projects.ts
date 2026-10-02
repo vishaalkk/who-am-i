@@ -1,44 +1,43 @@
-import { Book, Globe, Heart, Music } from "lucide-react";
 
-export const projects = [
+export type Project = {
+  title: string;
+  description: string;
+  link: string;
+  image?: string;
+};
+
+export const projects: Project[] = [
   {
     title: "Books of Disquiet",
     description: "My personal book collection.",
     link: "https://booksofdisquiet.com",
-    icon: Book,
-    color: "bg-pine-dark/5",
-    textColor: "text-pine-dark"
+    image: "/og/booksofdisquiet.png"
   },
   {
     title: "Where is Vishal?",
     description: "A real-time experiment in presence and digital footprint.",
     link: "https://whereisvishal.com",
-    icon: Globe,
-    color: "bg-slate-deep/5",
-    textColor: "text-slate-deep"
+    image: "/og/whereisvishal.png"
   },
   {
     title: "Hold My Guinness",
     description: "A lighthearted pursuit of the perfect pint and Irish culture.",
-    link: "https://holdmyguinness.com",
-    icon: Heart,
-    color: "bg-pine-mid/5",
-    textColor: "text-pine-mid"
+    link: "https://holdmyguinness.com"
   },
   {
     title: "Qavvali",
     description: "An exploration of the history, poetry, and soul of Qawwali music.",
-    link: "https://qavvali.com",
-    icon: Music,
-    color: "bg-amber-600/5",
-    textColor: "text-amber-700"
+    link: "https://qavvali.com"
   },
   {
     title: "Columbia Urdu Poetry Group",
     description: "An archive of our weekly poetry readings.",
-    link: "https://www.columbiaurdupoetrygroup.com/v2/",
-    icon: Book,
-    color: "bg-pine-900/5",
-    textColor: "text-pine-900"
+    link: "https://www.columbiaurdupoetrygroup.com/v2/"
+  },
+  {
+    title: "Bahr",
+    description: "An interactive guide and scansion tool for Urdu poetry meter (bahr).",
+    link: "https://urdubahr.com/",
+    image: "/og/urdubahr.png"
   }
 ];

@@ -31,9 +31,15 @@ export default function ProjectsPage() {
               }}
               className="project-card group p-8 rounded-2xl bg-white border border-pine-mid/5 hover:border-pine-mid/20 flex flex-col h-full hover:shadow-xl hover:shadow-pine-dark/5 transition-all"
             >
-              <div className={`w-12 h-12 rounded-xl ${project.color} ${project.textColor} flex items-center justify-center mb-6 transition-transform group-hover:scale-110 duration-500`}>
-                <project.icon size={24} />
-              </div>
+              {project.image && (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={project.image}
+                  alt={`${project.title} preview`}
+                  loading="lazy"
+                  className="-mx-8 -mt-8 mb-6 w-[calc(100%+4rem)] max-w-none aspect-[1200/630] object-cover rounded-t-2xl border-b border-pine-mid/5"
+                />
+              )}
               <h3 className="text-xl font-bold mb-3 text-ink group-hover:text-pine-dark transition-colors">
                 {project.title}
               </h3>
