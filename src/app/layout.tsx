@@ -19,9 +19,26 @@ const sans = Inter({
   variable: "--font-sans",
 });
 
+const description = "A personal space for my projects and interests.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://vishkk.com"),
   title: "V.",
-  description: "A personal space for my projects and interests.",
+  description,
+  openGraph: {
+    type: "website",
+    siteName: "V.",
+    title: "V.",
+    description,
+    url: "/",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "V." }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "V.",
+    description,
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
